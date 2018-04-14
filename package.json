@@ -1,0 +1,19 @@
+{
+  "name": "online-exams-project",
+  "version": "1.0.0",
+  "description": "Intermediate level exercise project",
+  "main": null,
+  "scripts": {
+    "wiki": "jingo -c wiki.yaml",
+    "ui-test": "node ui-test/main.js"
+  },
+  "keywords": [
+    "learning"
+  ],
+  "author": "Luis Ramirez",
+  "license": "ISC",
+  "devDependencies": {
+    "jingo": "^1.8.5",
+    "testcafe": "^0.19.2"
+  }
+}

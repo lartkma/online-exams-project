@@ -1,0 +1,58 @@
+---
+# Configuration sample file for Jingo (YAML)
+application:
+  title: Online Exams System for Schools
+  logo: ''
+  favicon: ''
+  repository: '.'
+  docSubdir: 'wiki'
+  secret: 2cc33d5dbe13993ccc24b4af6a6a0c321cd370d7
+  git: git
+  skipGitCheck: false
+  loggingMode: 0
+  pedanticMarkdown: true
+  gfmBreaks: false
+  staticWhitelist: '/\.png$/i, /\.jpg$/i, /\.gif$/i'
+authentication:
+  google:
+    enabled: false
+  github:
+    enabled: false
+  ldap:
+    enabled: false
+  local:
+    enabled: true
+    accounts:
+      - username: 'business'
+        passwordHash: 'e366805d9fee9849083e31042f42f5de0652de6e'
+        email: 'business@localhost'
+features:
+  markitup: false
+  codemirror: true
+  gravatar: false
+server:
+  hostname: localhost
+  port: 6067
+  localOnly: true
+  baseUrl: ''
+  CORS:
+    enabled: false
+    allowedOrigin: '*'
+authorization:
+  anonRead: true
+  validMatches: .+
+  emptyEmailMatches: false
+pages:
+  index: Home
+  title:
+    fromFilename: true
+    fromContent: false
+    asciiOnly: false
+    lowercase: false
+  itemsPerPage: 10
+customizations:
+  sidebar: _sidebar.md
+  footer: _footer.md
+  style: _style.css
+  script: _script.js
+
