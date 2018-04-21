@@ -1,0 +1,1 @@
+Favicon [designed by from Flaticon](https://www.shareicon.net/writing-reader-reading-book-people-books-man-717581)

@@ -3,7 +3,7 @@
 application:
   title: Online Exams System for Schools
   logo: ''
-  favicon: ''
+  favicon: _favicon.png
   repository: '.'
   docSubdir: 'wiki'
   secret: 2cc33d5dbe13993ccc24b4af6a6a0c321cd370d7
