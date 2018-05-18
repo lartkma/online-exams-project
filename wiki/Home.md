@@ -6,9 +6,9 @@ Welcome to the business documentation of the **Online Exams System for Schools**
 ## Objectives
 
 ### General
-* Implement an online exams application for middle and high schoolers.
+- Implement an online exams application for middle and high schoolers.
 
 ### Specific
-* Ease the work of elaborate, evaluate exams, and record the grades.
-* Compile a database of questions from different academic areas, curated and enhanced by teachers, to facilitate and systematize the creation of exams.
+- Ease the work of elaborate, evaluate exams, and record the grades.
+- Compile a database of questions from different academic areas, curated and enhanced by teachers, to facilitate and systematize the creation of exams.
 
