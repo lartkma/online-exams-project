@@ -1,2 +1,9 @@
 node_modules/
 .testRunParams.json
+
+# Java IDE
+.gradle/
+.settings/
+bin/
+.project
+.classpath
