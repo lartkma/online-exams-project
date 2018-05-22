@@ -10,8 +10,8 @@ public class MainController {
 
     @RequestMapping("/")
     public String mainScreen(Map<String, Object> model) {
-	model.put("name", "Java");
-	return "main";
+        model.put("name", "Java");
+        return "main";
     }
-    
+
 }
