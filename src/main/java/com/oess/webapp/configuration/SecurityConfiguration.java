@@ -83,7 +83,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                 AuthenticationException exception) throws IOException, ServletException {
             FlashMap flashMap = new FlashMap();
-            flashMap.put("status", getStatus(exception));
+            flashMap.put("isBadCredential", 
+                    exception instanceof BadCredentialsException ||
+                    exception instanceof UsernameNotFoundException);
+            flashMap.put("isInactive",
+                    exception instanceof AccountStatusException);
+            flashMap.put("isOtherAuthError",  // "None of the above" flag
+                    flashMap.values().stream().allMatch(v -> Boolean.FALSE.equals(v)));
             FlashMapManager flashMapManager = new SessionFlashMapManager();
             flashMapManager.saveOutputFlashMap(flashMap, request, response);
             redirectStrategy.sendRedirect(request, response, redirectUrl);
@@ -93,20 +99,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
         public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                 Authentication authentication) throws IOException, ServletException {
             FlashMap flashMap = new FlashMap();
-            flashMap.put("status", "logout");
+            flashMap.put("isLogout", true);
             FlashMapManager flashMapManager = new SessionFlashMapManager();
             flashMapManager.saveOutputFlashMap(flashMap, request, response);
             redirectStrategy.sendRedirect(request, response, redirectUrl);
-        }
-
-        private String getStatus(AuthenticationException exception) {
-            if (exception instanceof BadCredentialsException || exception instanceof UsernameNotFoundException) {
-                return "bad-credentials";
-            } else if (exception instanceof AccountStatusException) {
-                return "inactive";
-            } else {
-                return "auth-error";
-            }
         }
     }
 

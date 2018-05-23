@@ -2,13 +2,59 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Login - Online Exams System for Schools</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Login - Online Exams System for Schools</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+  <style type="text/css">
+    .absolute-screen {
+      position: absolute;
+      width: 100%; /*of screen*/
+      height: 100%; /*of screen*/
+    }
+    .v-center-divs {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  </style>
 </head>
-<body>
-<form action="login" method="POST">
-<label>Username: <input type="text" name="username"></label>
-<label>Password: <input type="password" name="password"></label>
-<input type="submit" value="Log In">
-</form>
+<body class="absolute-screen v-center-divs">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm text-right v-center-divs">
+         <h1><small class="text-muted">Welcome to the</small><br>Online Exams System for Schools</h1>
+      </div>
+      <div class="col-sm">
+        {{#isBadCredential}}
+        <div class="alert alert-danger mt-3" role="alert">
+          The user email and/or password is incorrect
+        </div>
+        {{/isBadCredential}}
+        {{#isInactive}}
+        <div class="alert alert-danger mt-3" role="alert">
+          The user is not available
+        </div>
+        {{/isInactive}}
+        {{#isOtherAuthError}}
+        <div class="alert alert-danger mt-3" role="alert">
+          Can't authorize correctly
+        </div>
+        {{/isOtherAuthError}}
+        <form method="POST">
+          <div class="form-group">
+            <label for="username">Email</label>
+            <input type="text" class="form-control" id="username" name="username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" >Log In</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
