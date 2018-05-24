@@ -28,5 +28,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web"
     compile "org.springframework.boot:spring-boot-starter-mustache"
     compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-jooq"
     testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "com.h2database:h2:1.4.197"
 }
