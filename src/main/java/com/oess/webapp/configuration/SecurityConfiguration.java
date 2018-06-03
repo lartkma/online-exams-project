@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +34,7 @@ import org.springframework.web.servlet.support.SessionFlashMapManager;
 
 import com.oess.model.entity.Teacher;
 import com.oess.model.repository.UserRepository;
+import com.oess.webapp.configuration.security.AuthProviderService;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
@@ -46,10 +46,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     private String h2ConsolePath;
 
     @Autowired
-    private DataSource dataSource;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private AuthProviderService authProviderService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -76,9 +76,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder())
-            .usersByUsernameQuery("select email,password,case inactive when 0 then 1 else 0 end from user where email = ?")
-            .authoritiesByUsernameQuery("select email, case when exists(select * from student where student_id = user_id) then 'STUDENT' else 'TEACHER' end from user where email = ?");
+        auth.authenticationProvider(authProviderService);
 
         Teacher teacher1 = new Teacher();
         teacher1.setFirstName("First");

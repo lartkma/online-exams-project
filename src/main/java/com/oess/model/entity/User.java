@@ -60,6 +60,10 @@ public abstract class User {
         this.lastName = lastName;
     }
 
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
+
     public String getNationalId() {
         return nationalId;
     }
