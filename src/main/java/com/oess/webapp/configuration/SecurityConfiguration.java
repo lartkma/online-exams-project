@@ -2,14 +2,14 @@ package com.oess.webapp.configuration;
 
 import java.io.IOException;
 
-import javax.sql.DataSource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,14 +33,23 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.support.SessionFlashMapManager;
 
+import com.oess.model.entity.Teacher;
+import com.oess.model.repository.UserRepository;
+
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     private static final String LOGIN_PATH = "/login";
     private static final String LOGOUT_PATH = "/logout";
 
+    @Value("${spring.h2.console.path}")
+    private String h2ConsolePath;
+
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -52,6 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
         AuthRedirectWithFlashData redirectToLoginHandler = new AuthRedirectWithFlashData(LOGIN_PATH);
         http.csrf().disable()
             .authorizeRequests()
+            .antMatchers(h2ConsolePath + "/**").permitAll()
             .mvcMatchers(LOGIN_PATH, LOGOUT_PATH).permitAll()
             .anyRequest().authenticated()
             .and().formLogin()
@@ -59,7 +69,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
             .failureHandler(redirectToLoginHandler)
             .and().logout()
             .logoutUrl(LOGOUT_PATH)
-            .logoutSuccessHandler(redirectToLoginHandler);
+            .logoutSuccessHandler(redirectToLoginHandler)
+            .and().headers()
+            .frameOptions().sameOrigin();
     }
 
     @Override
@@ -68,11 +80,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
             .usersByUsernameQuery("select email,password,case inactive when 0 then 1 else 0 end from user where email = ?")
             .authoritiesByUsernameQuery("select email, case when exists(select * from student where student_id = user_id) then 'STUDENT' else 'TEACHER' end from user where email = ?");
 
-        JdbcTemplate template = new JdbcTemplate(dataSource);
-        template.update("insert into user(first_name,last_name,national_id,email,password,inactive) values (?,?,?,?,?,?)",
-                "First","Name","56780534","root",passwordEncoder().encode("root"),0);
-        template.update("insert into user(first_name,last_name,national_id,email,password,inactive) values (?,?,?,?,?,?)",
-                "Second","Name","23467894","inactive",passwordEncoder().encode("root"),1);
+        Teacher teacher1 = new Teacher();
+        teacher1.setFirstName("First");
+        teacher1.setLastName("Name");
+        teacher1.setNationalId("56780534");
+        teacher1.setEmail("root");
+        teacher1.setEncryptedPassword(passwordEncoder().encode("root"));
+        
+        Teacher teacher2 = new Teacher();
+        teacher2.setFirstName("Second");
+        teacher2.setLastName("Name");
+        teacher2.setNationalId("23467894");
+        teacher2.setEmail("inactive");
+        teacher2.setEncryptedPassword(passwordEncoder().encode("root"));
+        teacher2.setInactive(true);
+        
+        userRepository.save(teacher1);
+        userRepository.save(teacher2);
     }
 
     @Override
